@@ -19,7 +19,7 @@ public class RdAccount {
         accountBalance = initialDepositAmount;
         this.accountNumber = phoneNumber;
     }
-    public RdAccount(String firstName, String lastName, String pin, int initialDepositAmount, String phoneNumber, String accountNumber) {
+    public RdAccount(String firstName, String lastName, String accountNumber, String pin, int initialDepositAmount, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.pin = pin;
@@ -34,7 +34,7 @@ public class RdAccount {
 
     }
 
-    public void withdraw(String pin, int withdrawalAmount) {
+    public void withdraw(int withdrawalAmount, String pin) {
         validatePin(pin);
         validateAmountIsNotNegative(withdrawalAmount);
         validateAmountCanBeWithdrawn(withdrawalAmount);
@@ -78,9 +78,5 @@ public class RdAccount {
                 AccountNumber: %s
                 AccountBalance: N%d
                 """, firstName, lastName, accountNumber, accountBalance);
-    }
-
-    public boolean canSenderSendMoney(String pin) {
-        return Objects.equals(pin, this.pin);
     }
 }

@@ -1,6 +1,5 @@
 package bank;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -88,7 +87,7 @@ public class RdBankTest {
     @Test public void testTransferBetweenAccounts(){
         rdBank.registerNewCustomer("firstName", "lastName", "0124", 2000, "08034513898");
 
-        rdBank.transfer("7031005737", "0123", 1000, "8034513898");
+        rdBank.transfer("7031005737", "8034513898", 1000, "0123");
 
         assertEquals("""
                 Name: firstName lastName
@@ -102,6 +101,8 @@ public class RdBankTest {
                 AccountBalance: N3000
                 """, rdBank.checkAndAccountDetails("8034513898", "0124"));
     }
+
+
 
     @Test public void testRegisteringWithWrongPhoneNumber(){
         assertThrows(IllegalArgumentException.class, () ->

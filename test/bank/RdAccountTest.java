@@ -32,7 +32,7 @@ public class RdAccountTest {
     @Test public void testWithDrawingFromAccount(){
         rdAccount.deposit(1000);
 
-        rdAccount.withdraw("0123", 2000);
+        rdAccount.withdraw(2000, "0123");
 
         assertEquals(1000, rdAccount.checkBalance("0123"));
     }
@@ -40,21 +40,21 @@ public class RdAccountTest {
     @Test public void testWithDrawingFromAccountTwice(){
         rdAccount.deposit(1000);
 
-        rdAccount.withdraw("0123", 1000);
-        rdAccount.withdraw("0123", 1000);
+        rdAccount.withdraw(1000, "0123");
+        rdAccount.withdraw(1000, "0123");
 
         assertEquals(1000, rdAccount.checkBalance("0123"));
     }
 
     @Test public void testWithdrawingNegativeAmount(){
 
-        assertThrows(IllegalArgumentException.class, () -> rdAccount.withdraw("0123", -1000));
+        assertThrows(IllegalArgumentException.class, () -> rdAccount.withdraw(-1000, "0123" ));
         assertEquals(2000, rdAccount.checkBalance("0123"));
     }
 
     @Test public void testWithdrawingAmountGreaterThanAccountBalance(){
 
-        assertThrows(IllegalArgumentException.class, () -> rdAccount.withdraw("0123", 5000));
+        assertThrows(IllegalArgumentException.class, () -> rdAccount.withdraw(5000, "0123"));
         assertEquals(2000, rdAccount.checkBalance("0123"));
     }
 
@@ -64,7 +64,7 @@ public class RdAccountTest {
 
     @Test public void testWithdrawingWithWrongPin(){
 
-        assertThrows(IllegalArgumentException.class, () -> rdAccount.withdraw("0126", 2000));
+        assertThrows(IllegalArgumentException.class, () -> rdAccount.withdraw(2000, "0126"));
         assertEquals(2000, rdAccount.checkBalance("0123"));
     }
 
