@@ -3,6 +3,7 @@ package PersonAndProblem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PersonTest {
@@ -17,5 +18,13 @@ public class PersonTest {
 
     @Test public void testPersonCanAddToThereProblem(){
         person.addProblem("babe hair", Type.FINANCIAL);
+
+        assertEquals("babe hair", person.tellProblem());
+    }
+
+    @Test public void testPersonCanAddToThereProblem2(){
+        person.addProblem("Failed course", Type.EDUCATION);
+
+        assertEquals("Failed course of type EDUCATION", person.tellProblem());
     }
 }

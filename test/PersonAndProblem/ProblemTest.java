@@ -25,8 +25,8 @@ public class ProblemTest {
     }
 
     @Test public void testProblemCanBeCreatedKnowingJustItsNameAndType3(){
-        problem = new Problem("Tuition", Type.EDUCATION);
-        assertEquals("Tuition of type EDUCATION", problem.toString());
+        problem = new Problem("Failed course", Type.EDUCATION);
+        assertEquals("Failed course of type EDUCATION", problem.toString());
     }
 
     @Test public void testProblemCanBeCreatedKnowingJustItsNameAndType4(){
