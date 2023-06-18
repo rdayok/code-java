@@ -12,13 +12,6 @@ public class RdAccount {
     private String accountNumber;
     private String phoneNumber;
 
-    public RdAccount(String firstName, String lastName, String pin, int initialDepositAmount, String phoneNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.pin = pin;
-        accountBalance = initialDepositAmount;
-        this.accountNumber = phoneNumber;
-    }
     public RdAccount(String firstName, String lastName, String accountNumber, String pin, int initialDepositAmount, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,36 +24,28 @@ public class RdAccount {
     public void deposit(int depositAmount) {
         validateAmountIsNotNegative(depositAmount);
         accountBalance += depositAmount;
-
     }
 
     public void withdraw(int withdrawalAmount, String pin) {
         validatePin(pin);
         validateAmountIsNotNegative(withdrawalAmount);
-        validateAmountCanBeWithdrawn(withdrawalAmount);
+        validateAmountIsLessThanBalance(withdrawalAmount);
         accountBalance -= withdrawalAmount;
     }
 
-    public int checkBalance(String pin)  {
-        validatePin(pin);
-        return accountBalance;
-    }
-
     private void validateAmountIsNotNegative(int amount) throws IllegalArgumentException {
-        boolean depositAmountLessThanZero = amount < ZERO;
-        if (depositAmountLessThanZero) throwIllegalArgumentException("Cannot transact negative amount. ");
+        boolean isAmountLessThanZero = amount < ZERO;
+        if (isAmountLessThanZero) throwIllegalArgumentException("\n** Cannot transact negative amount **\n");
     }
 
-    private void validateAmountCanBeWithdrawn(int withdrawalAmount) {
-        boolean amountIsGreaterThanBalance = withdrawalAmount > accountBalance;
-        if(amountIsGreaterThanBalance) throwIllegalArgumentException("Insufficient balance available for withdrawal");
+    private void validateAmountIsLessThanBalance(int withdrawalAmount) {
+        boolean isAmountGreaterThanBalance = withdrawalAmount > accountBalance;
+        if(isAmountGreaterThanBalance) throwIllegalArgumentException("\n** Insufficient balance available for withdrawal **\n");
     }
 
     private void validatePin(String pin) {
         boolean isNotA_ValidPin = !Objects.equals(pin, this.pin);
-        if (isNotA_ValidPin) {
-            throwIllegalArgumentException("You entered a wrong pin");
-        }
+        if (isNotA_ValidPin) throwIllegalArgumentException("\n** You entered a wrong pin **\n");
     }
 
     private void throwIllegalArgumentException(String message) {
@@ -71,7 +56,7 @@ public class RdAccount {
         return accountNumber;
     }
 
-    public String checkAccountDetails(String pin) {
+    public String checkBalance(String pin) {
         validatePin(pin);
         return String.format("""
                 Name: %s %s
