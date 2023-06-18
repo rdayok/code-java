@@ -1,29 +1,59 @@
 package phonebook;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ContactTest {
 
+    Contact contact;
+    @BeforeEach public void beforeEach(){
+        contact = new Contact("firstName", "lastName", "07031005737", "dayokr@gmail.com", "null");
+    }
+
     @Test public void testContactExist(){
-        Contact contact = new Contact("firstName", "lastName", "07031005737", "email");
         assertNotNull(contact);
     }
 
-    @Test public void testDisplayingTheCreatedContact(){
-        Contact contact = new Contact("firstName", "lastName", "07031005737", "email");
-        String expectedContact = "firstName lastName";
-        assertEquals(expectedContact, contact.toString());
+    @Test public void testDisplayingTheCreatedContactDetails(){
+        String expectedContactDetails = """
+                firstName lastName
+                07031005737
+                dayokr@gmail.com
+                """;
+        assertEquals(expectedContactDetails, contact.displayContactDetails());
     }
 
-    @Test public void testSeveralContactsCanBeCreated(){
-        Contact contact2 = new Contact("Ret", "Max", "08034513898", "dayokr@gmail.com");
+    @Test public void testEditingContactFirstName(){
+        contact.editFirstNameN("Ret");
 
-        String expectedContact = "Ret Max";
-        assertEquals(expectedContact, contact2.toString());
+        String expectedContactDetails = """
+                Ret lastName
+                07031005737
+                dayokr@gmail.com
+                """;
+        assertEquals(expectedContactDetails, contact.displayContactDetails());
     }
 
+    @Test public void testEditingContactLastName(){
+        contact.editLastName("Max");
+        String expectedContactDetails = """
+                firstName Max
+                07031005737
+                dayokr@gmail.com
+                """;
+        assertEquals(expectedContactDetails, contact.displayContactDetails());
+    }
 
+    @Test public void testEditingContactPhoneNumber(){
+        contact.editPhoneNumber("08034513898");
+
+        String expectedContactDetails = """
+                firstName lastName
+                08034513898
+                dayokr@gmail.com
+                """;
+        assertEquals(expectedContactDetails, contact.displayContactDetails());
+    }
 }
