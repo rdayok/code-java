@@ -46,6 +46,7 @@ public class RdStackTest {
 
         assertFalse(rdStack.isFull());
     }
+
     @Test public void testGettingStackSize(){
         assertEquals(1, rdStack.size());
     }
@@ -56,18 +57,18 @@ public class RdStackTest {
         assertEquals(2, rdStack.size());
     }
 
-    @Test public void testStackPeakMethodToSeeTheLastPushedElement(){
+    @Test public void testStackPeekMethodToSeeTheLastPushedElement(){
         assertEquals("retnaa", rdStack.peek());
     }
 
-    @Test public void testPeakAfterPushingXYZ_elements(){
+    @Test public void testPeekAfterPushingXYZ_elements(){
         rdStack.push("segun");
         rdStack.push("oyi");
 
         assertEquals("oyi", rdStack.peek());
     }
 
-    @Test public void testPeakAfterAPop(){
+    @Test public void testPeekAfterAPop(){
         rdStack.push("segun");
         rdStack.push("oyi");
 
@@ -82,12 +83,25 @@ public class RdStackTest {
         rdStack.push("ebuka");
         rdStack.push("ashlame");
 
-        assertThrows(IndexOutOfBoundsException.class, () -> rdStack.push("dayok"));
+        assertThrows(Error.class, () -> rdStack.push("dayok"));
     }
 
     @Test public void testPopWhenStackIsEmpty(){
         rdStack.pop();
-        assertThrows(IndexOutOfBoundsException.class, () -> rdStack.pop());
+        assertThrows(Error.class, () -> rdStack.pop());
     }
 
+    @Test public void testPushingAfterPoppingAllElements(){
+        rdStack.pop();
+        rdStack.push("ret");
+        assertEquals(1, rdStack.size());
+        assertEquals("ret", rdStack.peek());
+    }
+
+    @Test public void testPopWhenStackIsEmptyAndThenPushAgain(){
+        rdStack.pop();
+        assertThrows(Error.class, () -> rdStack.pop());
+        rdStack.push("man");
+        assertEquals("man", rdStack.peek());
+    }
 }

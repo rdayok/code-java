@@ -1,10 +1,14 @@
+import java.util.Arrays;
+
 public class RdStack {
 
     private boolean isEmpty;
+    private boolean isFull;
     private int elementCounter;
     private final int stackMemoryBlockSize;
 
     private final Object[] stackMemoryBlock;
+
 
     public RdStack(int stackMemoryBlockSize) {
         this.stackMemoryBlockSize = stackMemoryBlockSize;
@@ -12,19 +16,22 @@ public class RdStack {
     }
 
     public <T> void push(T element) {
-        validateStackCapacity();
+        validateIfStackIsFull();
         stackMemoryBlock[elementCounter++] = element;
-        tellStackIsEmptyOrNot();
+        tellIfStackIsFull();
+        tellIfStackIsEmpty();
     }
 
     public void pop() {
+        validateIfStackIsEmpty("Stack is Empty and you can't pop");
         elementCounter--;
-        validateStackCapacity();
-        tellStackIsEmptyOrNot();
+        tellIfStackIsEmpty();
     }
 
-    private void tellStackIsEmptyOrNot() {
-        isEmpty = elementCounter == 0;
+    public Object peek() {
+        validateIfStackIsEmpty("You can't peek an empty stack");
+        int lastElementInStack = elementCounter - 1;
+        return stackMemoryBlock[lastElementInStack];
     }
 
     public boolean isEmpty() {
@@ -32,26 +39,30 @@ public class RdStack {
     }
 
     public boolean isFull() {
-        return elementCounter == stackMemoryBlockSize;
+        return isFull;
     }
 
     public int size() {
         return elementCounter;
     }
 
-    public Object peek() {
-        int lastElementInStack = elementCounter - 1;
-        return stackMemoryBlock[lastElementInStack];
+    private void tellIfStackIsEmpty() {
+        isEmpty = elementCounter == 0;
     }
 
-    private void validateStackCapacity() {
-        boolean stackIsEmpty = elementCounter < 0;
-        boolean stackIsFull = elementCounter > stackMemoryBlockSize;
-        if (stackIsFull) throwArrayOutOfBoundException("Stack is full and you can't push");
-        if (stackIsEmpty) throwArrayOutOfBoundException("Stack is Empty and you can't pop");
+    private void tellIfStackIsFull() {
+        isFull = elementCounter == 5;
     }
 
-    private void throwArrayOutOfBoundException(String message) throws IndexOutOfBoundsException{
-        throw new ArrayIndexOutOfBoundsException(message);
+    private void validateIfStackIsFull() {
+        if(isFull) throwError("Stack is full and you can't push");
+    }
+
+    private void validateIfStackIsEmpty(String errorMessage) {
+        if (isEmpty) throwError(errorMessage);
+    }
+
+    private void throwError(String message) throws Error{
+        throw new Error(message);
     }
 }
