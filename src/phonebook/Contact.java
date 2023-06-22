@@ -59,7 +59,7 @@ public class Contact {
     public String displayContactDetailsForSearch() {
         return String.format("""
                 %s %s
-                %s
+                  %s
                 """, firstName, lastName, phoneNumber);
     }
 

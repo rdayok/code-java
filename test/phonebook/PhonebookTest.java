@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PhoneBookTest {
-    PhoneBook phonebook;
+public class PhonebookTest {
+    Phonebook phonebook;
 
     @BeforeEach
     public void beforeEach() {
-        phonebook = new PhoneBook("userName", "password");
+        phonebook = new Phonebook("userName", "password");
         phonebook.addContact("firstName", "lastName", "07031005737", "max_ret@yahoo.com");
     }
 
@@ -35,14 +35,14 @@ public class PhoneBookTest {
         phonebook.lockPhonebook();
         assertFalse(phonebook.isPhonebookUnlocked());
 
-        assertThrows(Error.class, () -> phonebook.unlockPhonebook("username", "password"));
+        assertThrows(IllegalArgumentException.class, () -> phonebook.unlockPhonebook("username", "password"));
     }
 
     @Test public void testUnlockingPhonebookWithWrongPassword(){
         phonebook.lockPhonebook();
         assertFalse(phonebook.isPhonebookUnlocked());
 
-        assertThrows(Error.class, () -> phonebook.unlockPhonebook("userName", "passWord"));
+        assertThrows(IllegalArgumentException.class, () -> phonebook.unlockPhonebook("userName", "passWord"));
     }
 
     @Test public void testContactListCounter(){
@@ -90,6 +90,19 @@ public class PhoneBookTest {
                 max_ret@yahoo.com
                 """;
         assertEquals(selectedContactDetails, phonebook.displaySelectedContact(1));
+    }
+
+    @Test public void testSelectingContactWithSerialNumberThatDoesNotExist(){
+        phonebook.addContact("ret", "max", "08031005737", "max_ret@yahoo.com");
+        phonebook.addContact("Angel", "Joe", "08031005737", "max_ret@yahoo.com");
+        String contactList = """
+                0 Angel Joe
+                1 firstName lastName
+                2 ret max
+                """;
+        assertEquals(contactList, phonebook.displayContactList());
+
+        assertThrows(IllegalArgumentException.class, () -> phonebook.displaySelectedContact(5));
     }
 
     @Test public void testDeletingSelectedContactFromDisplayedContactList(){
@@ -171,6 +184,7 @@ public class PhoneBookTest {
         assertEquals(selectedContactDetails, phonebook.displaySelectedContact(1));
     }
 
+
     @Test public void testSearchingByFullName(){
         phonebook.addContact("ret", "max", "08031005737", "max_ret@yahoo.com");
         phonebook.addContact("Angel", "Joe", "08031005737", "max_ret@yahoo.com");
@@ -183,7 +197,7 @@ public class PhoneBookTest {
 
         assertEquals("""
                 Angel Joe
-                08031005737
+                  08031005737
                 """, phonebook.search("Angel Joe"));
     }
 
@@ -199,7 +213,7 @@ public class PhoneBookTest {
 
         assertEquals("""
                 Angel Joe
-                08031005737
+                  08031005737
                 """, phonebook.search("Angel Joe"));
     }
 
@@ -215,7 +229,7 @@ public class PhoneBookTest {
 
         assertEquals("""
                 Angel Joe
-                08031005737
+                  08031005737
                 """, phonebook.search("Angel"));
     }
 
@@ -231,7 +245,7 @@ public class PhoneBookTest {
 
         assertEquals("""
                 Angel Joe
-                08031005737
+                  08031005737
                 """, phonebook.search("Joe"));
     }
 
@@ -247,7 +261,7 @@ public class PhoneBookTest {
 
         assertEquals("""
                 ret max
-                08031005737
+                  08031005737
                 """, phonebook.search("08031005737"));
     }
 
@@ -263,9 +277,9 @@ public class PhoneBookTest {
 
         assertEquals("""
                 Angel Joe
-                08031005737
+                  08031005737
                 ret max
-                08031005737
+                  08031005737
                 """, phonebook.search("08031005737"));
     }
 
@@ -281,56 +295,55 @@ public class PhoneBookTest {
 
         assertEquals("""
                 Angel Joe
-                08031005737
+                  08031005737
                 """, phonebook.search("angel Joe"));
     }
 
     @Test public void testAddingContactWithPhonebookLocked(){
         phonebook.lockPhonebook();
 
-        assertThrows(Error.class, () -> phonebook.addContact("ret", "max", "08031005737", "max_ret@yahoo.com"));
+        assertThrows(IllegalArgumentException.class, () -> phonebook.addContact("ret", "max", "08031005737", "max_ret@yahoo.com"));
     }
 
     @Test public void testDisplayContactListWithPhonebookLocked(){
         phonebook.lockPhonebook();
 
-        assertThrows(Error.class, () -> phonebook.displayContactList());
+        assertThrows(IllegalArgumentException.class, () -> phonebook.displayContactList());
     }
 
     @Test public void testDeletingContactWithPhonebookLocked(){
         phonebook.lockPhonebook();
 
-        assertThrows(Error.class, () -> phonebook.deleteSelectedContact(1));
+        assertThrows(IllegalArgumentException.class, () -> phonebook.deleteSelectedContact(1));
     }
 
     @Test public void testSearchWithPhonebookLocke(){
         phonebook.lockPhonebook();
 
-        assertThrows(Error.class, () -> phonebook.search("firstName"));
+        assertThrows(IllegalArgumentException.class, () -> phonebook.search("firstName"));
     }
 
     @Test public void testDisplaySelectedContactWithPhonebookLocked(){
         phonebook.lockPhonebook();
 
-        assertThrows(Error.class, () -> phonebook.displaySelectedContact(0));
+        assertThrows(IllegalArgumentException.class, () -> phonebook.displaySelectedContact(0));
     }
 
     @Test public void testEditingContactFirstNameWithPhonebookLocked(){
         phonebook.lockPhonebook();
 
-        assertThrows(Error.class, () -> phonebook.editFirstNameOfSelectedContact(0, "Retnaa"));
+        assertThrows(IllegalArgumentException.class, () -> phonebook.editFirstNameOfSelectedContact(0, "Retnaa"));
     }
 
     @Test public void testEditingContactLastNameWithPhonebookLocked() {
         phonebook.lockPhonebook();
 
-        assertThrows(Error.class, () -> phonebook.editLastNameOfSelectedContact(0, "Retnaa"));
+        assertThrows(IllegalArgumentException.class, () -> phonebook.editLastNameOfSelectedContact(0, "Retnaa"));
     }
 
     @Test public void testEditingContactPhoneNumberWithPhonebookLocked() {
         phonebook.lockPhonebook();
 
-        assertThrows(Error.class, () -> phonebook.editPhoneNumberOfSelectedContact(0, "07045674932"));
+        assertThrows(IllegalArgumentException.class, () -> phonebook.editPhoneNumberOfSelectedContact(0, "07045674932"));
     }
-
 }

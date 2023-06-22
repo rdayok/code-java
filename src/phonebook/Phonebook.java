@@ -2,7 +2,7 @@ package phonebook;
 
 import java.util.*;
 
-public class PhoneBook {
+public class Phonebook {
 
     private final String phonebookUsername;
     private String phonebookPassword;
@@ -12,8 +12,10 @@ public class PhoneBook {
     private List<String> IDList = new ArrayList<>();
     private StringBuilder displayContactListString;
     private String ID = "";
+    private int indexOfSearchedContacts;
 
-    public PhoneBook(String phonebookUserName, String phonebookPassword) {
+
+    public Phonebook(String phonebookUserName, String phonebookPassword) {
         this.phonebookUsername = phonebookUserName;
         this.phonebookPassword = phonebookPassword;
         isPhonebookUnlocked = true;
@@ -35,16 +37,16 @@ public class PhoneBook {
 
     private void validatePassword(String password) {
         boolean isPhonebookPasswordIncorrect = !(Objects.equals(this.phonebookPassword, password));
-        if(isPhonebookPasswordIncorrect) throwError("** This Password is incorrect **");
+        if(isPhonebookPasswordIncorrect) throwIllegalArgumentException("** This Password is incorrect **");
     }
 
     private void validateUsername(String username) {
         boolean isPhonebookUsernameIncorrect = !(Objects.equals(this.phonebookUsername, username));
-        if(isPhonebookUsernameIncorrect) throwError("** This phonebook user name is incorrect **");
+        if(isPhonebookUsernameIncorrect) throwIllegalArgumentException("** This phonebook user name is incorrect **");
     }
 
-    private void throwError(String errorMessage) {
-        throw new Error(errorMessage);
+    private void throwIllegalArgumentException(String errorMessage) {
+        throw new IllegalArgumentException(errorMessage);
     }
 
     public void addContact(String firstName, String lastName, String phoneNumber, String email) {
@@ -89,9 +91,15 @@ public class PhoneBook {
     }
 
     public String displaySelectedContact(int contactSerialNumber) {
+        validateContactSerialNumber(contactSerialNumber);
         validatePhonebookAccess();
         Contact gottenContactObject = getContactObject(IDList.get(contactSerialNumber));
         return gottenContactObject.displayContactDetails();
+    }
+
+    private void validateContactSerialNumber(int contactSerialNumber) {
+        boolean isSerialNumberValid = contactSerialNumber < listOfContactNameAndID.size() && contactSerialNumber >= 0;
+        if (!isSerialNumberValid) throwIllegalArgumentException("** Please select a serial number tha matches a contact to view **");
     }
 
     public void editFirstNameOfSelectedContact(int contactSerialNumber, String firstName) {
@@ -142,7 +150,6 @@ public class PhoneBook {
         IDList.clear();
         for (String contactNameAndID : listOfContactNameAndID) {
             takeOutTheName(contactNameAndID);
-            ID = "";
         }
     }
 
@@ -151,6 +158,7 @@ public class PhoneBook {
             concatenate(contactNameAndID.charAt(index));
         }
         IDList.add(ID);
+        ID = "";
     }
 
     private void concatenate(char selectedCharacter) {
@@ -178,6 +186,10 @@ public class PhoneBook {
     }
 
     private void validatePhonebookAccess() {
-        if(!isPhonebookUnlocked) throwError("** Phonebook is locked. Unlock to use **");
+        if(!isPhonebookUnlocked) throwIllegalArgumentException("** Phonebook is locked. Unlock to use **");
+    }
+
+    public String getUserName() {
+        return phonebookUsername;
     }
 }
