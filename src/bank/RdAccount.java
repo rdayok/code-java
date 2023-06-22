@@ -13,12 +13,21 @@ public class RdAccount {
     private String phoneNumber;
 
     public RdAccount(String firstName, String lastName, String accountNumber, String pin, int initialDepositAmount, String phoneNumber) {
+        initialiseAccountState(firstName, lastName, pin, initialDepositAmount, phoneNumber);
+        this.accountNumber = accountNumber;
+    }
+
+    private void initialiseAccountState(String firstName, String lastName, String pin, int initialDepositAmount, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.pin = pin;
         accountBalance = initialDepositAmount;
         this.phoneNumber = phoneNumber;
-        this.accountNumber = accountNumber;
+    }
+
+    public RdAccount(String firstName, String lastName, String pin, int initialDepositAmount, String phoneNumber) {
+        initialiseAccountState(firstName, lastName, pin, initialDepositAmount, phoneNumber);
+        this.accountNumber = null;
     }
 
     public void deposit(int depositAmount) {

@@ -245,6 +245,6 @@ public class RdBankMain {
                 ******************************
                 """;
         display(exitMessage);
-        System.exit(1);
+        System.exit(0);
     }
 }

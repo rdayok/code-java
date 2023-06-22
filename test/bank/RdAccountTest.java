@@ -9,7 +9,7 @@ public class RdAccountTest {
 
     RdAccount rdAccount;
     @BeforeEach public void beforeEach(){
-        rdAccount = new RdAccount("firstName", "lastName", "null", "0123",  2000, "07031005737");
+        rdAccount = new RdAccount("firstName", "lastName",           "0123",  2000, "07031005737");
     }
 
     @Test public void testAccountObjectExist(){
