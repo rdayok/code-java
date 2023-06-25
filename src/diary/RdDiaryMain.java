@@ -72,14 +72,14 @@ public class RdDiaryMain {
         try {
             rdDiary.unlockDiary(password);
             display("** Diary successfully unlocked **");
-        }catch (IllegalArgumentException exception){
+            entryMenu();
+        }catch (IllegalArgumentException | IllegalAccessException exception){
             display(exception.getMessage());
             menuAfterCreatingDiary();
-            entryMenu();
         }
     }
 
-    private static void entryMenu() {
+    private static void entryMenu() throws IllegalAccessException {
         String menuPrompt = """
                          ** Entry Menu **
                 *********************************
@@ -103,26 +103,77 @@ public class RdDiaryMain {
         }
     }
 
-    private static void editAnEntry() {
-        String selectedEntryToEdit = takeUserInput("Please what is the entry ID you want to edit? ");
-        int entryID = convertStringToInt(selectedEntryToEdit);
-    }
+    private static void findAnEntry() throws IllegalAccessException {
+        String selectedEntryToEdit = takeUserInput("Please ID of entry you want to view? ");
+        validateInputForSelection(selectedEntryToEdit);
+        int entryID = Integer.parseInt(selectedEntryToEdit);
 
-    private static int convertStringToInt(String selectedEntryToEdit) {
         try {
-            return Character.getNumericValue(selectedEntryToEdit.charAt(0));
-        }catch(InputMismatchException exception){
-            display("** Please enter a number **");
-            userInput.nextLine();
-            return convertStringToInt(selectedEntryToEdit);
+            Entry foundEntry = rdDiary.findEntryBy_ID(entryID);
+            display(foundEntry.getEntry());
+        } catch (IllegalAccessException exception) {
+            display(exception.getMessage());
+            entryMenu();
         }
     }
 
-    private static void createAnEntry() {
+    private static void deleteAnEntry() throws IllegalAccessException {
+        String selectedEntryToEdit = takeUserInput("Please what is the entry ID you want to delete? ");
+        validateInputForSelection(selectedEntryToEdit);
+        int entryID = Integer.parseInt(selectedEntryToEdit);
+        try {
+            rdDiary.deleteEntryBy_ID(entryID);
+            display("** Entry deleted successfully **");
+        } catch (IllegalArgumentException | IllegalAccessException exception) {
+            display(exception.getMessage());
+            entryMenu();
+        }
+    }
+
+    private static void editAnEntry()  {
+//        String selectedEntryToEdit = takeUserInput("Please what is the entry ID you want to edit? ");
+//        validateInputForSelection(selectedEntryToEdit);
+        int inpp = takeIntegerInput("Please what is the entry ID you want to edit? ");
+//        int entryID = Integer.parseInt(selectedEntryToEdit);
+
+        String entryTitle = takeUserInput("Please enter a new title: ");
+        String entryBody = takeUserInput("Enter the entry body: ");
+//        try {
+////            rdDiary.updateEntry(entryID, entryTitle, entryBody);
+//            display("** Entry edited successfully **");
+//        } catch (IllegalArgumentException exception) {
+//            display(exception.getMessage());
+//
+//        } catch (IllegalAccessException e) {
+//            throw new RuntimeException(e);
+//        }
+    }
+
+    private static int takeIntegerInput(String s) {
+        try {
+            return userInput.nextInt();
+        }catch (InputMismatchException e){
+            display("Please enter number ");
+            userInput.nextLine();
+            return takeIntegerInput(s);
+        }
+    }
+
+    private static void validateInputForSelection(String selectedEntryToEdit) {
+        try {
+            Integer.parseInt(selectedEntryToEdit);
+        }catch(IllegalArgumentException exception){
+            display("** Please enter a number **");
+        }
+    }
+
+    private static void createAnEntry() throws IllegalAccessException {
         int ID  = rdDiary.generateID_forNewEntry();
         display("Entry ID: "+ ID);
         String entryTitle = takeUserInput("Title: ");
         String entryBody = takeUserInput("Entry Body: ");
+        rdDiary.createEntry(entryTitle, entryBody);
+
         String menuPrompt = """
                      ** Entry successful **
                 *********************************
@@ -131,7 +182,6 @@ public class RdDiaryMain {
                 3 ->> To lock diary.
                 4 ->> Exit the diary application.
                 """;
-
         String menuSelection = takeUserInput(menuPrompt);
         switch (menuSelection.charAt(0)){
             case '1' -> createAnEntry();
@@ -151,7 +201,7 @@ public class RdDiaryMain {
 
     private static String takeUserInput(String menuPrompt) {
         display(menuPrompt);
-        return userInput.next();
+        return userInput.nextLine();
     }
 
     private static void display(String welcomeMessage) {

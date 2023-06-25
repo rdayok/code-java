@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DiariesTest {
+public class RdDiariesTest {
     RdDiaries rdDiaries;
     @BeforeEach public void beforeEach(){
         rdDiaries = new RdDiaries();
