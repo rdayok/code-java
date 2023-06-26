@@ -24,7 +24,7 @@ public class RdDiaryMain {
                 2 ->> Exit the diary application.
                 """;
 
-        String menuSelection = takeUserInput(menuPrompt);
+        String menuSelection = takeStringInput(menuPrompt);
         switch (menuSelection.charAt(0)){
             case '1' -> createA_diary();
             case '2' -> exitDiaryApplication();
@@ -45,8 +45,8 @@ public class RdDiaryMain {
     }
 
     public static void createA_diary() {
-        String username = takeUserInput("Please enter a username: ");
-        String password = takeUserInput("Please enter a password: ");
+        String username = takeStringInput("Please enter a username: ");
+        String password = takeStringInput("Please enter a password: ");
         rdDiary = new RdDiary(username, password);
         display("** Diary created successfully **");
         menuAfterCreatingDiary();
@@ -54,11 +54,13 @@ public class RdDiaryMain {
 
     private static void menuAfterCreatingDiary() {
         String menuPrompt = """
+                            DIARY MENU
+                **********************************
                 1 ->> Unlock diary to use.
                 2 ->> Exit the diary application.
                 """;
 
-        String menuSelection = takeUserInput(menuPrompt);
+        String menuSelection = takeStringInput(menuPrompt);
         switch (menuSelection.charAt(0)){
             case '1' -> unlockDiary();
             case '2' -> exitDiaryApplication();
@@ -68,7 +70,7 @@ public class RdDiaryMain {
 
     private static void unlockDiary() {
         display("** To unlock diary for use **");
-        String password = takeUserInput("Please  enter your password: ");
+        String password = takeStringInput("Please  enter your password: ");
         try {
             rdDiary.unlockDiary(password);
             display("** Diary successfully unlocked **");
@@ -81,7 +83,7 @@ public class RdDiaryMain {
 
     private static void entryMenu() throws IllegalAccessException {
         String menuPrompt = """
-                         ** Entry Menu **
+                         ** ENTRY MENU **
                 *********************************
                 1 ->> To create an entry.
                 2 ->> To edit and entry.
@@ -91,25 +93,22 @@ public class RdDiaryMain {
                 6 ->> Exit the diary application.
                 """;
 
-        String menuSelection = takeUserInput(menuPrompt);
+        String menuSelection = takeStringInput(menuPrompt);
         switch (menuSelection.charAt(0)){
             case '1' -> createAnEntry();
             case '2' -> editAnEntry();
             case '3' -> deleteAnEntry();
-            case '4' -> findAnEntry();
+            case '4' -> findAnEntryByID();
             case '5' -> lockDiary();
             case '6' -> exitDiaryApplication();
             default -> entryMenu();
         }
     }
 
-    private static void findAnEntry() throws IllegalAccessException {
-        String selectedEntryToEdit = takeUserInput("Please ID of entry you want to view? ");
-        validateInputForSelection(selectedEntryToEdit);
-        int entryID = Integer.parseInt(selectedEntryToEdit);
-
+    private static void findAnEntryByID() throws IllegalAccessException {
+        int selectedEntryToFind = takeIntegerInput("Please ID of entry you want to view? ");
         try {
-            Entry foundEntry = rdDiary.findEntryBy_ID(entryID);
+            Entry foundEntry = rdDiary.findEntryBy_ID(selectedEntryToFind);
             display(foundEntry.getEntry());
         } catch (IllegalAccessException exception) {
             display(exception.getMessage());
@@ -118,11 +117,9 @@ public class RdDiaryMain {
     }
 
     private static void deleteAnEntry() throws IllegalAccessException {
-        String selectedEntryToEdit = takeUserInput("Please what is the entry ID you want to delete? ");
-        validateInputForSelection(selectedEntryToEdit);
-        int entryID = Integer.parseInt(selectedEntryToEdit);
+        int selectedEntryToDelete = takeIntegerInput("Please what is the entry ID you want to delete? ");
         try {
-            rdDiary.deleteEntryBy_ID(entryID);
+            rdDiary.deleteEntryBy_ID(selectedEntryToDelete);
             display("** Entry deleted successfully **");
         } catch (IllegalArgumentException | IllegalAccessException exception) {
             display(exception.getMessage());
@@ -130,48 +127,36 @@ public class RdDiaryMain {
         }
     }
 
-    private static void editAnEntry()  {
-//        String selectedEntryToEdit = takeUserInput("Please what is the entry ID you want to edit? ");
-//        validateInputForSelection(selectedEntryToEdit);
-        int inpp = takeIntegerInput("Please what is the entry ID you want to edit? ");
-//        int entryID = Integer.parseInt(selectedEntryToEdit);
-
-        String entryTitle = takeUserInput("Please enter a new title: ");
-        String entryBody = takeUserInput("Enter the entry body: ");
-//        try {
-////            rdDiary.updateEntry(entryID, entryTitle, entryBody);
-//            display("** Entry edited successfully **");
-//        } catch (IllegalArgumentException exception) {
-//            display(exception.getMessage());
-//
-//        } catch (IllegalAccessException e) {
-//            throw new RuntimeException(e);
-//        }
-    }
-
-    private static int takeIntegerInput(String s) {
+    private static void editAnEntry() throws IllegalAccessException {
+        int selectedEntry = takeIntegerInput("Please what is the entry ID you want to edit? ");
+        String entryTitle = takeStringInput("Please enter a new title: ");
+        String entryBody = takeStringInput("Please enter a new entry body: ");
         try {
-            return userInput.nextInt();
-        }catch (InputMismatchException e){
-            display("Please enter number ");
-            userInput.nextLine();
-            return takeIntegerInput(s);
+            rdDiary.updateEntry(selectedEntry, entryTitle, entryBody);
+            display("** Entry edited successfully **");
+        } catch (IllegalArgumentException | IllegalAccessException exception) {
+            display(exception.getMessage());
+            entryMenu();
         }
     }
 
-    private static void validateInputForSelection(String selectedEntryToEdit) {
+    private static int takeIntegerInput(String prompt) {
+        display(prompt);
+        String errorMessage = "Your input is not valid. Please enter a number";
         try {
-            Integer.parseInt(selectedEntryToEdit);
-        }catch(IllegalArgumentException exception){
-            display("** Please enter a number **");
+            return userInput.nextInt();
+        }catch (InputMismatchException exception){
+            display(errorMessage);
+            userInput.next();
+            return takeIntegerInput(prompt);
         }
     }
 
     private static void createAnEntry() throws IllegalAccessException {
         int ID  = rdDiary.generateID_forNewEntry();
         display("Entry ID: "+ ID);
-        String entryTitle = takeUserInput("Title: ");
-        String entryBody = takeUserInput("Entry Body: ");
+        String entryTitle = takeStringInput("Title: ");
+        String entryBody = takeStringInput("Entry Body: ");
         rdDiary.createEntry(entryTitle, entryBody);
 
         String menuPrompt = """
@@ -182,7 +167,7 @@ public class RdDiaryMain {
                 3 ->> To lock diary.
                 4 ->> Exit the diary application.
                 """;
-        String menuSelection = takeUserInput(menuPrompt);
+        String menuSelection = takeStringInput(menuPrompt);
         switch (menuSelection.charAt(0)){
             case '1' -> createAnEntry();
             case '2' -> {entryMenu();}
@@ -199,9 +184,9 @@ public class RdDiaryMain {
         menuAfterCreatingDiary();
     }
 
-    private static String takeUserInput(String menuPrompt) {
+    private static String takeStringInput(String menuPrompt) {
         display(menuPrompt);
-        return userInput.nextLine();
+        return userInput.next();
     }
 
     private static void display(String welcomeMessage) {
