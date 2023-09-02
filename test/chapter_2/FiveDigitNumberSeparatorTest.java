@@ -1,7 +1,6 @@
-package Chapter2Test;
+package chapter_2;
 
 
-import Chapter2.FiveDigitNumberSeparator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

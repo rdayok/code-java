@@ -1,6 +1,5 @@
-package Chapter2Test;
+package chapter_2;
 
-import Chapter2.LargestAndSmallestInteger;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
