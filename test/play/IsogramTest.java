@@ -43,4 +43,10 @@ public class IsogramTest {
         assertFalse(isogram.checkIfAnIsogramFor(userInput));
     }
 
+    @Test
+    public void testInput_returnsTrueEvenWithSpace() {
+        String userInput = "As dfgh jklmn bvcxz qwertyuiop";
+        assertTrue(isogram.checkIfAnIsogramFor(userInput));
+    }
+
 }
