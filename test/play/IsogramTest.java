@@ -15,38 +15,33 @@ public class IsogramTest {
     }
 
     @Test
-    public void testInputDoesntContainNumbers() {
-        String userInput = "qwertyuioplkjhgfdsazxcvbn8";
-        assertFalse(isogram.checkIfAnIsogramFor(userInput));
-    }
-
-    @Test
-    public void testInputDoesntContainSymbols() {
-        String userInput = "asdfghjklmnbvcxzqwertyuio-";
-        assertFalse(isogram.checkIfAnIsogramFor(userInput));
-    }
-
-    @Test
-    public void testInput_returnsFalse() {
-        String userInput = "JohnJonesuijhgtfredswqaxcv";
-        assertFalse(isogram.checkIfAnIsogramFor(userInput));
-    }
-    @Test
-    public void testInput_returnsTrues() {
-        String userInput = "Asdfghjklmnbvcxzqwertyuiop";
+    public void testForInputThatContainNumber() {
+        String userInput = "asdf22gh4jklmnbv998cx2zqwertyuiop8";
         assertTrue(isogram.checkIfAnIsogramFor(userInput));
     }
 
     @Test
-    public void testInput_returnsFalseForInputWithLengthLessThanTwentySix() {
+    public void testForInputWithSpecialCharacters() {
+        String userInput = "asdfgh<jklzxcvbnmq>wertyuiop-";
+        assertTrue(isogram.checkIfAnIsogramFor(userInput));
+    }
+
+    @Test
+    public void testForInputWithSpaces() {
+        String userInput = "asdfg hjklz xcvb nmq wertyuiop";
+        assertTrue(isogram.checkIfAnIsogramFor(userInput));
+    }
+
+    @Test
+    public void testForInputWithLowerCaseAndUpperCase() {
+        String userInput = "Asdfghjklmnbvcxzqwertyuioa";
+        assertFalse(isogram.checkIfAnIsogramFor(userInput));
+    }
+
+    @Test
+    public void testForInputWithoutSomeAlphabets() {
         String userInput = "Johnjones";
         assertFalse(isogram.checkIfAnIsogramFor(userInput));
-    }
-
-    @Test
-    public void testInput_returnsTrueEvenWithSpace() {
-        String userInput = "As dfgh jklmn bvcxz qwertyuiop";
-        assertTrue(isogram.checkIfAnIsogramFor(userInput));
     }
 
 }
