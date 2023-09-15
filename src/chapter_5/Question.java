@@ -1,6 +1,6 @@
 package chapter_5;
 
-public class Questions {
+public class Question {
     private String question;
     private String optionOne;
     private String optionTwo;
@@ -36,5 +36,14 @@ public class Questions {
 
     public void setAnswer(Boolean answer) {
         this.answer = answer;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("""
+                %s
+                %s
+                %s
+                """, question, optionOne, optionTwo);
     }
 }
